@@ -441,7 +441,172 @@ class JSONViewer {
     }
 }
 
-// Initialize the JSON viewer when the page loads
+// Chatbot Class
+class Chatbot {
+    constructor() {
+        this.widget = document.getElementById('chatbotWidget');
+        this.toggle = document.getElementById('chatbotToggle');
+        this.container = document.getElementById('chatbotContainer');
+        this.closeBtn = document.getElementById('chatbotClose');
+        this.messagesContainer = document.getElementById('chatbotMessages');
+        this.input = document.getElementById('chatbotInput');
+        this.sendBtn = document.getElementById('chatbotSend');
+        this.status = document.getElementById('chatbotStatus');
+        
+        this.isOpen = false;
+        this.isLoading = false;
+        
+        this.initEventListeners();
+    }
+    
+    initEventListeners() {
+        // Toggle chatbot
+        this.toggle.addEventListener('click', () => this.toggleChatbot());
+        
+        // Close chatbot
+        this.closeBtn.addEventListener('click', () => this.closeChatbot());
+        
+        // Send message
+        this.sendBtn.addEventListener('click', () => this.sendMessage());
+        
+        // Send message on Enter key
+        this.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage();
+            }
+        });
+        
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (this.isOpen && !this.widget.contains(e.target)) {
+                this.closeChatbot();
+            }
+        });
+    }
+    
+    toggleChatbot() {
+        if (this.isOpen) {
+            this.closeChatbot();
+        } else {
+            this.openChatbot();
+        }
+    }
+    
+    openChatbot() {
+        this.isOpen = true;
+        this.widget.classList.add('open');
+        this.input.focus();
+    }
+    
+    closeChatbot() {
+        this.isOpen = false;
+        this.widget.classList.remove('open');
+    }
+    
+    async sendMessage() {
+        const message = this.input.value.trim();
+        if (!message || this.isLoading) return;
+        
+        // Add user message to chat
+        this.addMessage(message, 'user');
+        
+        // Clear input and show loading
+        this.input.value = '';
+        this.setLoading(true);
+        
+        try {
+            // Send message to backend
+            const response = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Add bot response to chat
+                this.addMessage(data.response, 'bot');
+                this.setStatus('', 'success');
+            } else {
+                throw new Error(data.error || 'Failed to get response');
+            }
+            
+        } catch (error) {
+            console.error('Chatbot error:', error);
+            this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+            this.setStatus('Error: ' + error.message, 'error');
+        } finally {
+            this.setLoading(false);
+        }
+    }
+    
+    addMessage(content, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chatbot-message ${sender}-message`;
+        
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        messageDiv.innerHTML = `
+            <div class="message-content">${this.escapeHtml(content)}</div>
+            <div class="message-time">${timeString}</div>
+        `;
+        
+        this.messagesContainer.appendChild(messageDiv);
+        this.scrollToBottom();
+    }
+    
+    setLoading(loading) {
+        this.isLoading = loading;
+        this.sendBtn.disabled = loading;
+        
+        if (loading) {
+            this.sendBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>
+            `;
+            this.setStatus('Thinking...', '');
+        } else {
+            this.sendBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                </svg>
+            `;
+        }
+    }
+    
+    setStatus(message, type) {
+        this.status.textContent = message;
+        this.status.className = `chatbot-status ${type}`;
+        
+        if (!message) {
+            setTimeout(() => {
+                this.status.textContent = '';
+                this.status.className = 'chatbot-status';
+            }, 3000);
+        }
+    }
+    
+    scrollToBottom() {
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}
+
+// Initialize the JSON viewer and chatbot when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new JSONViewer();
+    new Chatbot();
 });

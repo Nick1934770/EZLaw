@@ -1,12 +1,18 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import requests
 import zipfile
 import json
 import io
 import tempfile
 import os
+from google import genai
 
 app = Flask(__name__)
+
+# Configure Gemini API (google-genai client)
+# Make sure GEMINI_API_KEY is set in your environment
+
+genai_client = genai.Client(api_key="AIzaSyA7FgZWAiJuRsT9ROVQthoViVacQt7VlEs") 
 
 @app.route('/')
 def index():
@@ -116,5 +122,42 @@ def get_laws():
             'error': f'Error processing LegiScan data: {str(e)}'
         }), 500
 
+@app.route('/api/chatbot', methods=['POST'])
+def chatbot():
+    """Handle chatbot messages using Gemini API"""
+    try:
+        if not genai_client:
+            return jsonify({
+                'success': False,
+                'error': 'Gemini API not configured. Please set GEMINI_API_KEY environment variable.'
+            }), 500
+        
+        data = request.get_json()
+        if not data or 'message' not in data:
+            return jsonify({
+                'success': False,
+                'error': 'Message is required'
+            }), 400
+        
+        user_message = data['message']
+        
+        # Generate response using Gemini (google-genai client)
+        result = genai_client.models.generate_content(
+            model="gemini-2.5-pro",
+            contents="You are a lookup machine that will only return the top 3 bill ids sorted in order of relevance with one being garunteed to be relevant and less progressive at number 3, we need these bill ids in the database related to the user input for congress API bill lookup ONLY RETURN THE BILL IDS NOTHING ELSE:" + user_message
+        )
+
+        return jsonify({
+            'success': True,
+            'response': result.text
+        })
+        
+    except Exception as e:
+        print(f"Chatbot error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': f'Error processing message: {str(e)}'
+        }), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=3001)
+    app.run(debug=True, host='127.0.0.1', port=3003)

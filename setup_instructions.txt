@@ -1,0 +1,21 @@
+#!/bin/bash
+# Simple script to set up Gemini API key for EZLaw Chatbot
+
+echo "🤖 Gemini API Key Setup for EZLaw Chatbot"
+echo "=========================================="
+echo ""
+echo "📋 Steps to get your Gemini API key:"
+echo "1. The Gemini API key page should be open in your browser"
+echo "2. Sign in with your Google account"
+echo "3. Click 'Create API Key'"
+echo "4. Copy the generated API key"
+echo ""
+echo "🔑 Once you have your API key, run this command:"
+echo "   export GEMINI_API_KEY=\"your_api_key_here\""
+echo ""
+echo "🔄 To make it permanent, add this line to your ~/.zshrc:"
+echo "   echo 'export GEMINI_API_KEY=\"your_api_key_here\"' >> ~/.zshrc"
+echo ""
+echo "🚀 Then restart your terminal or run: source ~/.zshrc"
+echo ""
+echo "✅ After setting the API key, start the app with: python3 run.py"

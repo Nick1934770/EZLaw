@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask JSON Viewer</title>
+    <title>EzLaw</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -32,12 +32,6 @@
                     <div id="chatbotContainer">
                         <div id="chatbotInlineSearch" style="display: flex; gap: 8px; align-items: center; margin-top: 12px;">
                             <input type="text" id="chatbotInput" placeholder="Explain your situation..." maxlength="500" style="flex: 1; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                            <button id="chatbotSend" class="chatbot-send-btn" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #e5e7eb; background: #f9fafb; cursor: pointer;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                                    <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
-                                </svg>
-                            </button>
                         </div>
                         <div id="chatbotStatus" style="margin-top: 6px;"></div>
                         <div id="chatbotMessages" style="margin-top: 12px;"></div>
@@ -49,9 +43,9 @@
                 <div class="viewer-header">
                     <h2 id="fileName">JSON Content</h2>
                     <div class="viewer-controls">
-                        <button id="copyButton" class="control-button">Copy</button>
-                        <button id="downloadButton" class="control-button">Download</button>
-                        <button id="clearButton" class="control-button">Clear</button>
+                        <button id="copyButton" class="control-button" disabled>Copy</button>
+                        <button id="downloadButton" class="control-button" disabled>Download</button>
+                        <button id="clearButton" class="control-button" disabled>Clear</button>
                     </div>
                 </div>
                 <div class="json-container">

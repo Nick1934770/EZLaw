@@ -29,7 +29,7 @@ def get_laws():
     """Fetch laws from LegiScan API, extract zip, and return JSON data"""
     try:
         # LegiScan API endpoint
-        api_url = "https://api.legiscan.com/?key=b6faddc9568927ca69bf4440932834d6&op=getDataset&access_key=5NPEPvbRSeqY4haz080Nwh&id=2183"
+        api_url = "https://api.legiscan.com/?key=b6faddc9568927ca69bf4440932834d6&op=getDataset&access_key=AIzaSyACvYoe1WWHSqw6-C12_wU11WmIyAGoYJY"
         
         print(f"Fetching data from LegiScan API: {api_url}")
         
@@ -155,6 +155,17 @@ def chatbot():
         
         # Store Gemini result for later use
         gemini_response = result.text
+
+        parts = gemini_response.split("|")
+
+# Make sure we only take the first three messages
+        message1 = parts[0].strip() if len(parts) > 0 else None
+        message2 = parts[1].strip() if len(parts) > 1 else None
+        message3 = parts[2].strip() if len(parts) > 2 else None
+
+        type1, number1, congress1 = message1.split(".")
+        type2, number2, congress2 = message2.split(".")
+        type3, number3, congress3 = message3.split(".")
 
         return jsonify({
             'success': True,

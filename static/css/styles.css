@@ -88,16 +88,7 @@ main {
     stroke-width: 2.5;
 }
 
-.get-laws-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.get-laws-button:disabled:hover {
-    transform: none;
-    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
-}
+/* Removed disabled styling - button is now interactive */
 
 .spinning {
     animation: spin 1s linear infinite;
@@ -310,6 +301,20 @@ main {
 .control-button:hover {
     background: #f9fafb;
     border-color: #9ca3af;
+}
+
+.control-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: #9ca3af;
+}
+
+.control-button:disabled:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: #9ca3af;
 }
 
 .json-container {
@@ -583,6 +588,8 @@ main {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
+
+/* Removed disabled styling - input is now interactive */
 
 .chatbot-send-btn {
     width: 40px;

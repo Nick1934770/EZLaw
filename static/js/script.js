@@ -19,9 +19,50 @@ class JSONViewer {
     }
     
     initEventListeners() {
-        this.copyButton.addEventListener('click', () => this.copyToClipboard());
-        this.downloadButton.addEventListener('click', () => this.downloadJSON());
-        this.clearButton.addEventListener('click', () => this.clearViewer());
+        // All event listeners disabled - UI is non-interactive
+        // this.copyButton.addEventListener('click', () => this.copyToClipboard());
+        // this.downloadButton.addEventListener('click', () => this.downloadJSON());
+        // this.clearButton.addEventListener('click', () => this.clearViewer());
+        
+        // Enable Analyze Situation button
+        this.getLawsButton.addEventListener('click', async () => {
+            const searchInput = document.getElementById('chatbotInput');
+            const inputValue = searchInput.value.trim();
+            
+            if (inputValue) {
+                user_message = inputValue;
+                console.log('User message from button:', user_message);
+                
+                // Send message to backend and get Gemini response
+                try {
+                    const response = await fetch('/api/chatbot', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: user_message })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        gemini_response = data.response;
+                        console.log('Gemini response from button:', gemini_response);
+                    } else {
+                        console.error('Error from backend:', data.error);
+                        gemini_response = 'Error: ' + data.error;
+                    }
+                } catch (error) {
+                    console.error('Error sending message to backend:', error);
+                    gemini_response = 'Error: Failed to connect to backend';
+                }
+                
+                // Clear the search input after processing
+                searchInput.value = '';
+            } else {
+                console.log('No input provided');
+            }
+        });
     }
     
     // Removed Get Laws click handler and related logic
@@ -180,33 +221,33 @@ class Chatbot {
     }
     
     initEventListeners() {
-        // Toggling controls may not exist in inline UI
-        if (this.toggle) {
-            this.toggle.addEventListener('click', () => this.toggleChatbot());
-        }
-        if (this.closeBtn) {
-            this.closeBtn.addEventListener('click', () => this.closeChatbot());
-        }
+        // All chatbot functionality disabled - UI is non-interactive
+        // if (this.toggle) {
+        //     this.toggle.addEventListener('click', () => this.toggleChatbot());
+        // }
+        // if (this.closeBtn) {
+        //     this.closeBtn.addEventListener('click', () => this.closeChatbot());
+        // }
         
-        // Send message
-        this.sendBtn.addEventListener('click', () => this.sendMessage());
+        // Send message functionality disabled
+        // this.sendBtn.addEventListener('click', () => this.sendMessage());
         
-        // Send message on Enter key
-        this.input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                this.sendMessage();
-            }
-        });
+        // Enter key functionality disabled
+        // this.input.addEventListener('keypress', (e) => {
+        //     if (e.key === 'Enter' && !e.shiftKey) {
+        //         e.preventDefault();
+        //         this.sendMessage();
+        //     }
+        // });
         
-        // Close-on-outside-click only relevant if floating widget exists
-        if (this.widget && this.widget.classList.contains('chatbot-widget')) {
-            document.addEventListener('click', (e) => {
-                if (this.isOpen && !this.widget.contains(e.target)) {
-                    this.closeChatbot();
-                }
-            });
-        }
+        // Close-on-outside-click disabled
+        // if (this.widget && this.widget.classList.contains('chatbot-widget')) {
+        //     document.addEventListener('click', (e) => {
+        //         if (this.isOpen && !this.widget.contains(e.target)) {
+        //             this.closeChatbot();
+        //         }
+        //     });
+        // }
     }
     
     toggleChatbot() {
@@ -329,8 +370,54 @@ class Chatbot {
     }
 }
 
+// Global variables to store user message and Gemini response
+let user_message = '';
+let gemini_response = '';
+
 // Initialize the JSON viewer and chatbot when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     new JSONViewer();
     new Chatbot();
+    
+    // Add Enter key handler for search input
+    const searchInput = document.getElementById('chatbotInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const inputValue = searchInput.value.trim();
+                if (inputValue) {
+                    user_message = inputValue;
+                    console.log('User message saved:', user_message);
+                    
+                    // Send message to backend and get Gemini response
+                    try {
+                        const response = await fetch('/api/chatbot', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ message: user_message })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            gemini_response = data.response;
+                            console.log('Gemini response saved:', gemini_response);
+                        } else {
+                            console.error('Error from backend:', data.error);
+                            gemini_response = 'Error: ' + data.error;
+                        }
+                    } catch (error) {
+                        console.error('Error sending message to backend:', error);
+                        gemini_response = 'Error: Failed to connect to backend';
+                    }
+                    
+                    // Clear the input after processing
+                    searchInput.value = '';
+                }
+            }
+        });
+    }
 });

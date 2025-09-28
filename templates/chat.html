@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZLaw - Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EZLaw</h1>
+            <p>Explain your situation and chat with the assistant</p>
+        </header>
+        
+        <main>
+            <div class="upload-section">
+                <div class="get-laws-wrapper">
+                    <button id="getLaws" class="get-laws-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14,2 14,8 20,8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10,9 9,9 8,9"></polyline>
+                        </svg>
+                        Analyze Situation
+                    </button>
+                </div>
+
+                <!-- Non-AI search bar (UI only) -->
+                <div class="inline-search" style="display: flex; gap: 8px; align-items: center; margin-top: 12px;">
+                    <input type="text" id="searchInput" placeholder="Explain your situation..." maxlength="500" style="flex: 1; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                    <button id="searchButton" class="chatbot-send-btn" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #e5e7eb; background: #f9fafb; cursor: pointer;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="viewer-section" id="viewerSection" style="display: none;">
+                <div class="viewer-header">
+                    <h2 id="fileName">JSON Content</h2>
+                    <div class="viewer-controls">
+                        <button id="copyButton" class="control-button">Copy</button>
+                        <button id="downloadButton" class="control-button">Download</button>
+                        <button id="clearButton" class="control-button">Clear</button>
+                    </div>
+                </div>
+                <div class="json-container">
+                    <pre id="jsonDisplay"></pre>
+                </div>
+            </div>
+
+            <div class="error-section" id="errorSection" style="display: none;">
+                <div class="error-message">
+                    <h3>Error</h3>
+                    <p id="errorText"></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Widget (floating on the right) -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-toggle" id="chatbotToggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </div>
+        
+        <div class="chatbot-container" id="chatbotContainer">
+            <div class="chatbot-header">
+                <h3>Legal Assistant</h3>
+                <button class="chatbot-close" id="chatbotClose">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chatbot-message bot-message">
+                    <div class="message-content">
+                        Hello! I'm your legal assistant. How can I help?
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-container">
+                <div class="chatbot-input-wrapper">
+                    <input type="text" id="chatbotInput" placeholder="Type a message..." maxlength="500">
+                    <button id="chatbotSend" class="chatbot-send-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+                <div class="chatbot-status" id="chatbotStatus"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+

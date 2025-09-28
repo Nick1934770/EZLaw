@@ -24,76 +24,23 @@
                             <line x1="16" y1="17" x2="8" y2="17"></line>
                             <polyline points="10,9 9,9 8,9"></polyline>
                         </svg>
-                        Get Laws
+                        Analyze Situation
                     </button>
                 </div>
-                
-                <div class="states-dropdown-wrapper">
-                    <label for="statesDropdown" class="states-label">Select US State:</label>
-                    <div class="dropdown-container">
-                        <input type="text" id="statesInput" class="states-input" placeholder="Type to search states..." autocomplete="off">
-                        <div class="dropdown-arrow">
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="3,4.5 6,7.5 9,4.5"></polyline>
-                            </svg>
+                <!-- Inline Gemini Assistant Search UI -->
+                <div id="chatbotWidget">
+                    <div id="chatbotContainer">
+                        <div id="chatbotInlineSearch" style="display: flex; gap: 8px; align-items: center; margin-top: 12px;">
+                            <input type="text" id="chatbotInput" placeholder="Explain your situation..." maxlength="500" style="flex: 1; padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
+                            <button id="chatbotSend" class="chatbot-send-btn" style="padding: 10px 14px; border-radius: 8px; border: 1px solid #e5e7eb; background: #f9fafb; cursor: pointer;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                                </svg>
+                            </button>
                         </div>
-                        <div class="dropdown-list" id="statesDropdown">
-                            <div class="dropdown-item" data-value="AL">Alabama</div>
-                            <div class="dropdown-item" data-value="AK">Alaska</div>
-                            <div class="dropdown-item" data-value="AZ">Arizona</div>
-                            <div class="dropdown-item" data-value="AR">Arkansas</div>
-                            <div class="dropdown-item" data-value="CA">California</div>
-                            <div class="dropdown-item" data-value="CO">Colorado</div>
-                            <div class="dropdown-item" data-value="CT">Connecticut</div>
-                            <div class="dropdown-item" data-value="DE">Delaware</div>
-                            <div class="dropdown-item" data-value="FL">Florida</div>
-                            <div class="dropdown-item" data-value="GA">Georgia</div>
-                            <div class="dropdown-item" data-value="HI">Hawaii</div>
-                            <div class="dropdown-item" data-value="ID">Idaho</div>
-                            <div class="dropdown-item" data-value="IL">Illinois</div>
-                            <div class="dropdown-item" data-value="IN">Indiana</div>
-                            <div class="dropdown-item" data-value="IA">Iowa</div>
-                            <div class="dropdown-item" data-value="KS">Kansas</div>
-                            <div class="dropdown-item" data-value="KY">Kentucky</div>
-                            <div class="dropdown-item" data-value="LA">Louisiana</div>
-                            <div class="dropdown-item" data-value="ME">Maine</div>
-                            <div class="dropdown-item" data-value="MD">Maryland</div>
-                            <div class="dropdown-item" data-value="MA">Massachusetts</div>
-                            <div class="dropdown-item" data-value="MI">Michigan</div>
-                            <div class="dropdown-item" data-value="MN">Minnesota</div>
-                            <div class="dropdown-item" data-value="MS">Mississippi</div>
-                            <div class="dropdown-item" data-value="MO">Missouri</div>
-                            <div class="dropdown-item" data-value="MT">Montana</div>
-                            <div class="dropdown-item" data-value="NE">Nebraska</div>
-                            <div class="dropdown-item" data-value="NV">Nevada</div>
-                            <div class="dropdown-item" data-value="NH">New Hampshire</div>
-                            <div class="dropdown-item" data-value="NJ">New Jersey</div>
-                            <div class="dropdown-item" data-value="NM">New Mexico</div>
-                            <div class="dropdown-item" data-value="NY">New York</div>
-                            <div class="dropdown-item" data-value="NC">North Carolina</div>
-                            <div class="dropdown-item" data-value="ND">North Dakota</div>
-                            <div class="dropdown-item" data-value="OH">Ohio</div>
-                            <div class="dropdown-item" data-value="OK">Oklahoma</div>
-                            <div class="dropdown-item" data-value="OR">Oregon</div>
-                            <div class="dropdown-item" data-value="PA">Pennsylvania</div>
-                            <div class="dropdown-item" data-value="RI">Rhode Island</div>
-                            <div class="dropdown-item" data-value="SC">South Carolina</div>
-                            <div class="dropdown-item" data-value="SD">South Dakota</div>
-                            <div class="dropdown-item" data-value="TN">Tennessee</div>
-                            <div class="dropdown-item" data-value="TX">Texas</div>
-                            <div class="dropdown-item" data-value="UT">Utah</div>
-                            <div class="dropdown-item" data-value="VT">Vermont</div>
-                            <div class="dropdown-item" data-value="VA">Virginia</div>
-                            <div class="dropdown-item" data-value="WA">Washington</div>
-                            <div class="dropdown-item" data-value="WV">West Virginia</div>
-                            <div class="dropdown-item" data-value="WI">Wisconsin</div>
-                            <div class="dropdown-item" data-value="WY">Wyoming</div>
-                        </div>
-                    </div>
-                    <div class="selected-state" id="selectedState" style="display: none;">
-                        <span class="selected-label">Selected State:</span>
-                        <span class="selected-value" id="selectedStateValue"></span>
-                        <button class="clear-selection" id="clearState">×</button>
+                        <div id="chatbotStatus" style="margin-top: 6px;"></div>
+                        <div id="chatbotMessages" style="margin-top: 12px;"></div>
                     </div>
                 </div>
             </div>
@@ -122,49 +69,9 @@
         </main>
     </div>
 
-    <!-- Chatbot Widget -->
-    <div class="chatbot-widget" id="chatbotWidget">
-        <div class="chatbot-toggle" id="chatbotToggle">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-        </div>
-        
-        <div class="chatbot-container" id="chatbotContainer">
-            <div class="chatbot-header">
-                <h3>Legal Assistant</h3>
-                <button class="chatbot-close" id="chatbotClose">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            
-            <div class="chatbot-messages" id="chatbotMessages">
-                <div class="chatbot-message bot-message">
-                    <div class="message-content">
-                        Hello! I'm your legal assistant. I can help answer questions about legal documents and provide general legal information. How can I assist you today?
-                    </div>
-                    <div class="message-time">Just now</div>
-                </div>
-            </div>
-            
-            <div class="chatbot-input-container">
-                <div class="chatbot-input-wrapper">
-                    <input type="text" id="chatbotInput" placeholder="Ask me anything about legal matters..." maxlength="500">
-                    <button id="chatbotSend" class="chatbot-send-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-                <div class="chatbot-status" id="chatbotStatus"></div>
-            </div>
-        </div>
-    </div>
+    
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
+

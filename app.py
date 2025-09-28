@@ -19,6 +19,11 @@ def index():
     """Serve the main JSON viewer page"""
     return render_template('index.html')
 
+@app.route('/chat')
+def chat():
+    """Serve the chat page with floating chatbot and inline search"""
+    return render_template('chat.html')
+
 @app.route('/api/get-laws')
 def get_laws():
     """Fetch laws from LegiScan API, extract zip, and return JSON data"""
@@ -144,8 +149,12 @@ def chatbot():
         # Generate response using Gemini (google-genai client)
         result = genai_client.models.generate_content(
             model="gemini-2.5-pro",
-            contents="You are a lookup machine that will only return the top 3 bill ids sorted in order of relevance with one being garunteed to be relevant and less progressive at number 3, we need these bill ids in the database related to the user input for congress API bill lookup ONLY RETURN THE BILL IDS NOTHING ELSE:" + user_message
+            contents="You are a lookup machine that will only return the top 3 bill ids sorted in order of relevance with one being garunteed to be relevant and less progressive at number 3, we need these bill ids in the database related to the user input for" + 
+            f"congress API bill lookup ONLY RETURN THE BILL IDS, CONGRESS NUMBER AND NOTHING ELSE in the form: hr.1234.118, then use a bar to seperate elements (laws), this is the user's input:" + user_message
         )
+        
+        # Store Gemini result for later use
+        gemini_response = result.text
 
         return jsonify({
             'success': True,

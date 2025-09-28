@@ -48,13 +48,19 @@ class JSONViewer {
                     if (data.success) {
                         gemini_response = data.response;
                         console.log('Gemini response from button:', gemini_response);
+                        // Redirect to results page
+                        window.location.href = `/results?user_message=${encodeURIComponent(user_message)}&gemini_response=${encodeURIComponent(gemini_response)}`;
                     } else {
                         console.error('Error from backend:', data.error);
                         gemini_response = 'Error: ' + data.error;
+                        // Redirect to results page even with error
+                        window.location.href = `/results?user_message=${encodeURIComponent(user_message)}&gemini_response=${encodeURIComponent(gemini_response)}`;
                     }
                 } catch (error) {
                     console.error('Error sending message to backend:', error);
                     gemini_response = 'Error: Failed to connect to backend';
+                    // Redirect to results page even with error
+                    window.location.href = `/results?user_message=${encodeURIComponent(user_message)}&gemini_response=${encodeURIComponent(gemini_response)}`;
                 }
                 
                 // Clear the search input after processing
@@ -405,13 +411,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (data.success) {
                             gemini_response = data.response;
                             console.log('Gemini response saved:', gemini_response);
+                            // Redirect to results page
+                            window.location.href = `/results?user_message=${encodeURIComponent(user_message)}&gemini_response=${encodeURIComponent(gemini_response)}`;
                         } else {
                             console.error('Error from backend:', data.error);
                             gemini_response = 'Error: ' + data.error;
+                            // Redirect to results page even with error
+                            window.location.href = `/results?user_message=${encodeURIComponent(user_message)}&gemini_response=${encodeURIComponent(gemini_response)}`;
                         }
                     } catch (error) {
                         console.error('Error sending message to backend:', error);
                         gemini_response = 'Error: Failed to connect to backend';
+                        // Redirect to results page even with error
+                        window.location.href = `/results?user_message=${encodeURIComponent(user_message)}&gemini_response=${encodeURIComponent(gemini_response)}`;
                     }
                     
                     // Clear the input after processing

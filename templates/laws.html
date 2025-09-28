@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZLaw - Law Documents</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .laws-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .laws-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+        
+        .laws-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .laws-content {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        
+        .law-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .law-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .law-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .law-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .detail-item {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .pdf-container {
+            margin-top: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .pdf-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+        
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="laws-container">
+        <div class="laws-header">
+            <h1>EZLaw Documents</h1>
+            <p>Legal documents and analysis</p>
+        </div>
+        
+        <div class="laws-content">
+            <a href="/" class="back-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Search
+            </a>
+            
+            <div id="lawsContent">
+                <div class="loading">
+                    <div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #667eea; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
+                    <span style="margin-left: 0.5rem;">Loading law documents...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get bill IDs from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const billIds = urlParams.get('bills');
+        
+        if (!billIds) {
+            document.getElementById('lawsContent').innerHTML = `
+                <div class="error">
+                    <h3>No bills specified</h3>
+                    <p>Please go back to the search page and analyze a situation first.</p>
+                </div>
+            `;
+        } else {
+            // Parse bill IDs and fetch law details
+            const bills = billIds.split('|').map(bill => bill.trim()).filter(bill => bill.length > 0);
+            loadLawDetails(bills);
+        }
+        
+        async function loadLawDetails(bills) {
+            const lawsContent = document.getElementById('lawsContent');
+            
+            try {
+                // Fetch law details for each bill
+                const lawPromises = bills.map(async (billId, index) => {
+                    try {
+                        const response = await fetch(`/api/law-details?bill_id=${encodeURIComponent(billId)}`);
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            return { billId, data: data.law, index: index + 1 };
+                        } else {
+                            return { billId, error: data.error, index: index + 1 };
+                        }
+                    } catch (error) {
+                        return { billId, error: 'Failed to fetch law details', index: index + 1 };
+                    }
+                });
+                
+                const results = await Promise.all(lawPromises);
+                
+                // Display results
+                let html = '';
+                results.forEach(result => {
+                    if (result.error) {
+                        html += `
+                            <div class="law-card">
+                                <div class="law-title">Bill ${result.index}: ${result.billId}</div>
+                                <div class="error">
+                                    <strong>Error:</strong> ${result.error}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        const law = result.data;
+                        html += `
+                            <div class="law-card">
+                                <div class="law-title">${law.title || 'Untitled Bill'}</div>
+                                <div class="law-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">Bill Number</div>
+                                        <div class="detail-value">${law.number || 'N/A'}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Type</div>
+                                        <div class="detail-value">${law.type || 'N/A'}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Congress</div>
+                                        <div class="detail-value">${law.congress || 'N/A'}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Introduced Date</div>
+                                        <div class="detail-value">${law.introducedDate || 'N/A'}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Latest Action</div>
+                                        <div class="detail-value">${law.latestAction?.text || 'N/A'}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Policy Area</div>
+                                        <div class="detail-value">${law.policyArea?.name || 'N/A'}</div>
+                                    </div>
+                                </div>
+                                ${law.textContent ? `
+                                    <div class="text-content" style="margin-top: 1rem; background: #1e293b; border-radius: 8px; padding: 1.5rem; color: #e2e8f0;">
+                                        <h4 style="color: #7dd3fc; margin-bottom: 1rem;">Bill Text Content:</h4>
+                                        <div style="max-height: 400px; overflow-y: auto; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 12px; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word;">
+                                            ${law.textContent}
+                                        </div>
+                                    </div>
+                                ` : law.legislationUrl ? `
+                                    <div style="margin-top: 1rem;">
+                                        <a href="${law.legislationUrl}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; text-decoration: none;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14,2 14,8 20,8"></polyline>
+                                            </svg>
+                                            View Full Bill on Congress.gov
+                                        </a>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }
+                });
+                
+                lawsContent.innerHTML = html;
+                
+            } catch (error) {
+                lawsContent.innerHTML = `
+                    <div class="error">
+                        <h3>Error Loading Laws</h3>
+                        <p>Failed to load law details: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask JSON Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JSON Viewer</h1>
+            <p>Upload and view JSON files with syntax highlighting</p>
+        </header>
+        
+        <main>
+            <div class="upload-section">
+                <div class="get-laws-wrapper">
+                    <button id="getLaws" class="get-laws-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14,2 14,8 20,8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10,9 9,9 8,9"></polyline>
+                        </svg>
+                        Get Laws
+                    </button>
+                </div>
+                
+                <div class="states-dropdown-wrapper">
+                    <label for="statesDropdown" class="states-label">Select US State:</label>
+                    <div class="dropdown-container">
+                        <input type="text" id="statesInput" class="states-input" placeholder="Type to search states..." autocomplete="off">
+                        <div class="dropdown-arrow">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3,4.5 6,7.5 9,4.5"></polyline>
+                            </svg>
+                        </div>
+                        <div class="dropdown-list" id="statesDropdown">
+                            <div class="dropdown-item" data-value="AL">Alabama</div>
+                            <div class="dropdown-item" data-value="AK">Alaska</div>
+                            <div class="dropdown-item" data-value="AZ">Arizona</div>
+                            <div class="dropdown-item" data-value="AR">Arkansas</div>
+                            <div class="dropdown-item" data-value="CA">California</div>
+                            <div class="dropdown-item" data-value="CO">Colorado</div>
+                            <div class="dropdown-item" data-value="CT">Connecticut</div>
+                            <div class="dropdown-item" data-value="DE">Delaware</div>
+                            <div class="dropdown-item" data-value="FL">Florida</div>
+                            <div class="dropdown-item" data-value="GA">Georgia</div>
+                            <div class="dropdown-item" data-value="HI">Hawaii</div>
+                            <div class="dropdown-item" data-value="ID">Idaho</div>
+                            <div class="dropdown-item" data-value="IL">Illinois</div>
+                            <div class="dropdown-item" data-value="IN">Indiana</div>
+                            <div class="dropdown-item" data-value="IA">Iowa</div>
+                            <div class="dropdown-item" data-value="KS">Kansas</div>
+                            <div class="dropdown-item" data-value="KY">Kentucky</div>
+                            <div class="dropdown-item" data-value="LA">Louisiana</div>
+                            <div class="dropdown-item" data-value="ME">Maine</div>
+                            <div class="dropdown-item" data-value="MD">Maryland</div>
+                            <div class="dropdown-item" data-value="MA">Massachusetts</div>
+                            <div class="dropdown-item" data-value="MI">Michigan</div>
+                            <div class="dropdown-item" data-value="MN">Minnesota</div>
+                            <div class="dropdown-item" data-value="MS">Mississippi</div>
+                            <div class="dropdown-item" data-value="MO">Missouri</div>
+                            <div class="dropdown-item" data-value="MT">Montana</div>
+                            <div class="dropdown-item" data-value="NE">Nebraska</div>
+                            <div class="dropdown-item" data-value="NV">Nevada</div>
+                            <div class="dropdown-item" data-value="NH">New Hampshire</div>
+                            <div class="dropdown-item" data-value="NJ">New Jersey</div>
+                            <div class="dropdown-item" data-value="NM">New Mexico</div>
+                            <div class="dropdown-item" data-value="NY">New York</div>
+                            <div class="dropdown-item" data-value="NC">North Carolina</div>
+                            <div class="dropdown-item" data-value="ND">North Dakota</div>
+                            <div class="dropdown-item" data-value="OH">Ohio</div>
+                            <div class="dropdown-item" data-value="OK">Oklahoma</div>
+                            <div class="dropdown-item" data-value="OR">Oregon</div>
+                            <div class="dropdown-item" data-value="PA">Pennsylvania</div>
+                            <div class="dropdown-item" data-value="RI">Rhode Island</div>
+                            <div class="dropdown-item" data-value="SC">South Carolina</div>
+                            <div class="dropdown-item" data-value="SD">South Dakota</div>
+                            <div class="dropdown-item" data-value="TN">Tennessee</div>
+                            <div class="dropdown-item" data-value="TX">Texas</div>
+                            <div class="dropdown-item" data-value="UT">Utah</div>
+                            <div class="dropdown-item" data-value="VT">Vermont</div>
+                            <div class="dropdown-item" data-value="VA">Virginia</div>
+                            <div class="dropdown-item" data-value="WA">Washington</div>
+                            <div class="dropdown-item" data-value="WV">West Virginia</div>
+                            <div class="dropdown-item" data-value="WI">Wisconsin</div>
+                            <div class="dropdown-item" data-value="WY">Wyoming</div>
+                        </div>
+                    </div>
+                    <div class="selected-state" id="selectedState" style="display: none;">
+                        <span class="selected-label">Selected State:</span>
+                        <span class="selected-value" id="selectedStateValue"></span>
+                        <button class="clear-selection" id="clearState">×</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="viewer-section" id="viewerSection" style="display: none;">
+                <div class="viewer-header">
+                    <h2 id="fileName">JSON Content</h2>
+                    <div class="viewer-controls">
+                        <button id="copyButton" class="control-button">Copy</button>
+                        <button id="downloadButton" class="control-button">Download</button>
+                        <button id="clearButton" class="control-button">Clear</button>
+                    </div>
+                </div>
+                <div class="json-container">
+                    <pre id="jsonDisplay"></pre>
+                </div>
+            </div>
+
+            <div class="error-section" id="errorSection" style="display: none;">
+                <div class="error-message">
+                    <h3>Error</h3>
+                    <p id="errorText"></p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

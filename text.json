@@ -1,0 +1,86 @@
+{
+  "document": {
+    "title": "Legal Document Analysis",
+    "type": "contract",
+    "date": "2024-01-15",
+    "parties": [
+      {
+        "name": "ABC Corporation",
+        "role": "Client",
+        "address": {
+          "street": "123 Business Ave",
+          "city": "New York",
+          "state": "NY",
+          "zipCode": "10001"
+        },
+        "contact": {
+          "email": "legal@abccorp.com",
+          "phone": "+1-555-0123"
+        }
+      },
+      {
+        "name": "XYZ Legal Services",
+        "role": "Service Provider",
+        "address": {
+          "street": "456 Law Street",
+          "city": "Boston",
+          "state": "MA",
+          "zipCode": "02101"
+        },
+        "contact": {
+          "email": "contracts@xyzlegal.com",
+          "phone": "+1-555-0456"
+        }
+      }
+    ],
+    "terms": {
+      "duration": "12 months",
+      "startDate": "2024-02-01",
+      "endDate": "2025-01-31",
+      "renewalOptions": {
+        "automatic": false,
+        "noticePeriod": "30 days"
+      },
+      "paymentTerms": {
+        "amount": 50000,
+        "currency": "USD",
+        "schedule": "monthly",
+        "dueDate": "1st of each month"
+      }
+    },
+    "clauses": [
+      {
+        "id": "confidentiality",
+        "title": "Confidentiality Agreement",
+        "description": "Both parties agree to maintain confidentiality of all shared information",
+        "mandatory": true
+      },
+      {
+        "id": "liability",
+        "title": "Limitation of Liability",
+        "description": "Liability is limited to the contract value",
+        "mandatory": true
+      },
+      {
+        "id": "termination",
+        "title": "Termination Clause",
+        "description": "Either party may terminate with 30 days notice",
+        "mandatory": false
+      }
+    ],
+    "signatures": {
+      "clientSigned": false,
+      "providerSigned": false,
+      "witnessRequired": true,
+      "notarizationRequired": false
+    },
+    "metadata": {
+      "version": "1.2",
+      "lastModified": "2024-01-15T14:30:00Z",
+      "createdBy": "Legal Assistant AI",
+      "reviewStatus": "pending",
+      "priority": "high",
+      "tags": ["contract", "service-agreement", "legal", "business"]
+    }
+  }
+}

@@ -1,92 +1,161 @@
-# Flask JSON Viewer Web App
+# EZLaw Analyzer
 
-A simple Flask web application for viewing JSON files with syntax highlighting and interactive features.
+A comprehensive legal analysis web application that uses AI to help users understand legal situations and find relevant laws.
 
 ## Features
 
-- **Flask Backend**: Simple Python Flask server to serve the web app
-- **File Upload**: Click to select or drag & drop JSON files
-- **Client-side Processing**: JSON validation and processing handled in the browser
-- **Syntax Highlighting**: Beautiful color-coded JSON display
-- **Sample Data**: Load built-in sample JSON data
-- **Copy to Clipboard**: Copy formatted JSON with one click
-- **Download**: Save the current JSON to your device
-- **Responsive Design**: Works on desktop and mobile devices
-- **Error Handling**: Clear error messages for invalid JSON
+### 🔍 **Legal Analysis**
+- **AI-Powered Search**: Enter your legal situation and get AI analysis
+- **Bill Identification**: Automatically identifies relevant congressional bills
+- **Legal Insights**: Get detailed legal analysis and recommendations
+
+### 📋 **Law Documents**
+- **Congress API Integration**: Fetches detailed information from Congress.gov
+- **Bill Details**: View comprehensive bill information including:
+  - Bill title, number, type, and congress session
+  - Introduction date and latest actions
+  - Policy area and sponsor information
+  - Full text content of bills
+- **Text Content Display**: Read actual bill text with proper formatting
+
+### 🎯 **User Experience**
+- **Simple Interface**: Clean, intuitive design for easy navigation
+- **Responsive Design**: Works perfectly on desktop and mobile
+- **Real-time Processing**: Fast AI analysis and law retrieval
+- **Professional Styling**: Modern UI with legal document aesthetics
 
 ## How to Use
 
 ### Installation
 
-1. Install Python dependencies:
+1. **Install Python dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. Start the Flask server:
-   ```bash
-   python run.py
-   ```
-   or
+2. **Start the application:**
    ```bash
    python app.py
    ```
 
-3. Open your browser and go to: `http://127.0.0.1:3000`
+3. **Open your browser and go to:** `http://127.0.0.1:3003`
 
-### Using the App
+### Using the Application
 
-1. Upload JSON files by:
-   - Clicking "Choose JSON File" to select a file
-   - Dragging and dropping a JSON file onto the page
-   - Clicking "Load Sample JSON" to see the viewer in action
+1. **Enter Your Legal Situation:**
+   - Type your legal question or situation in the search bar
+   - Click "Analyze Situation" or press Enter
 
-2. View your JSON with beautiful syntax highlighting
+2. **Review AI Analysis:**
+   - View the identified relevant bills
+   - Read the detailed legal analysis
+   - Get practical recommendations
 
-3. Use the controls to:
-   - **Copy**: Copy formatted JSON to clipboard
-   - **Download**: Save JSON to your device
-   - **Clear**: Reset the viewer
+3. **Explore Law Documents:**
+   - Click "View Law Documents" to see full bill details
+   - Read the complete text of relevant laws
+   - Access additional information on Congress.gov
 
 ## Project Structure
 
 ```
-EZLaw/
-├── app.py              # Simple Flask application
-├── run.py              # Development server runner
-├── requirements.txt    # Python dependencies
+EZLaw-1/
+├── app.py                    # Main Flask application
+├── requirements.txt          # Python dependencies
 ├── templates/
-│   └── index.html     # Flask HTML template
+│   ├── index.html           # Main search page
+│   ├── results.html         # Analysis results page
+│   ├── laws.html           # Law documents page
+│   └── chat.html           # Chat interface (if needed)
 ├── static/
 │   ├── css/
-│   │   └── styles.css # CSS styling
+│   │   └── styles.css      # Application styling
 │   └── js/
-│       └── script.js  # Client-side JavaScript functionality
-├── text.json         # Sample JSON file
-└── README.md         # This documentation
+│       └── script.js       # Frontend functionality
+└── README.md               # This documentation
 ```
 
 ## Technical Features
 
-- **Flask Framework**: Simple Python web framework for serving static files
-- **Client-side Processing**: All JSON handling done in the browser
-- **File Reading**: Uses FileReader API for local file processing
-- **Error Handling**: Client-side error validation and user feedback
-- **No Server Dependencies**: All processing happens in the browser
+### **Backend (Flask)**
+- **AI Integration**: Gemini API for legal analysis
+- **Congress API**: Real-time law data from Congress.gov
+- **RESTful API**: Clean endpoints for frontend communication
+- **Error Handling**: Comprehensive error management
+
+### **Frontend (HTML/CSS/JavaScript)**
+- **Interactive UI**: Dynamic content loading and user interactions
+- **API Communication**: Seamless backend integration
+- **Responsive Design**: Mobile-first approach
+- **Modern Styling**: Professional legal document aesthetics
+
+### **APIs Used**
+- **Google Gemini API**: AI-powered legal analysis
+- **Congress.gov API**: Official congressional data
+- **LegiScan API**: Additional legal data sources
+
+## Key Endpoints
+
+- **`/`** - Main search interface
+- **`/results`** - Analysis results with legal insights
+- **`/laws`** - Detailed law documents and text
+- **`/api/chatbot`** - AI analysis endpoint
+- **`/api/legal-analysis`** - Detailed legal analysis
+- **`/api/law-details`** - Congress API integration
+
+## Dependencies
+
+- **Flask 3.0.0** - Web framework
+- **requests 2.31.0** - HTTP client for API calls
+- **google-genai 0.3.0** - Google AI integration
 
 ## Browser Support
 
 Works in all modern browsers that support:
-- File API
-- Clipboard API
+- ES6+ JavaScript features
+- Fetch API
 - CSS Grid/Flexbox
-- ES6 Classes
+- File API (for future features)
 
 ## Development
 
-To run in development mode with auto-reload:
+To run in development mode:
 ```bash
-python run.py
+python app.py
 ```
 
-The server will start on `http://127.0.0.1:3000` with debug mode enabled.
+The server will start on `http://127.0.0.1:3003` with debug mode enabled.
+
+## Features Overview
+
+### 🔍 **Search & Analysis**
+- Enter legal situations in natural language
+- Get AI-powered analysis and bill identification
+- Receive practical legal recommendations
+
+### 📄 **Law Documents**
+- View complete bill text and details
+- Access official congressional information
+- Read legislative history and actions
+
+### 🎨 **User Interface**
+- Clean, professional design
+- Mobile-responsive layout
+- Intuitive navigation flow
+
+### ⚡ **Performance**
+- Fast AI processing
+- Efficient API integration
+- Optimized for speed and reliability
+
+## Getting Started
+
+1. **Clone the repository**
+2. **Install dependencies**: `pip install -r requirements.txt`
+3. **Run the application**: `python app.py`
+4. **Open browser**: Navigate to `http://127.0.0.1:3003`
+5. **Start analyzing**: Enter your legal situation and get AI-powered insights!
+
+---
+
+**EZLaw Analyzer** - Making legal analysis accessible and intelligent.

@@ -12,7 +12,7 @@ app = Flask(__name__)
 # Configure Gemini API (google-genai client)
 # Make sure GEMINI_API_KEY is set in your environment
 
-genai_client = genai.Client(api_key="AIzaSyA-Bag56EwDCngln_IkVeKOhNMqZV8IFiA") 
+genai_client = genai.Client(api_key="AIzaSyBO_i-vn_f3e8auewP_03MFB5-uD1c4-bQ") 
 
 @app.route('/')
 def index():
